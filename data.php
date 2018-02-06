@@ -1,9 +1,8 @@
 <?php 
 	include 'functions.php';
 
-	$id ="";
-
 	if (!isset($_GET['edit'])) {
+		$contact['id'] = null;
 		$contact['first_name'] = null;
 		$contact['last_name'] = null;
 		$contact['contact_number'] = null;
@@ -25,7 +24,7 @@
 			<h1>Edit<br>Contact</h1>
 		</div>	
 		<form method="post" action="functions.php" >
-			<input type="hidden" name="id" value="<?php echo $id; ?>">
+			<input type="hidden" name="id" value="<?php echo $contact['id']; ?>">
 			<div class="bind">
 				<i class="material-icons">account_circle</i><input id="firstname" type="text" name="firstname" placeholder="First Name" value="<?php echo $contact['first_name']; ?>" >
 			</div>
@@ -47,7 +46,7 @@
 			</div>
 			<?php endif ?>
 				
-			<button id="btn-update" type="submit" name="save" >Update</button>
+			<button id="btn-update" type="submit" name="update" >Update</button>
 				<!-- <a href="data.php">Display all contacts</a> -->
 			</form>
 	</div>

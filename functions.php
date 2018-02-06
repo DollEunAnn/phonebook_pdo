@@ -92,17 +92,17 @@ class Phone
 		}
 	}
 
-	public function updateContact($id){
+	public function updateContact($id,$fname,$lname,$cnumber){
 		try {
 
-			$query = $this->conn->prepare('UPDATE first_name = :fname,last_name = $lname,contact_number = $cnumber FROM contacts WHERE id = :id');
-			$query->bindParam(':id', $_POST['$id'], PDO::PARAM_STR);
-			$query->bindParam(':fname', $_POST['$fname'], PDO::PARAM_STR);       
-            $query->bindParam(':lname', $_POST['$lname'], PDO::PARAM_STR); 
-            $query->bindParam(':cnumber', $_POST['$cnumber'], PDO::PARAM_STR);    
+			$query = $this->conn->prepare("UPDATE contacts SET first_name =:fname,last_name =:lname,contact_number =:cnumber WHERE id = :id");
+			$query->bindParam(':fname',$fname, PDO::PARAM_STR);       
+            $query->bindParam(':lname', $lname, PDO::PARAM_STR); 
+            $query->bindParam(':cnumber', $cnumber, PDO::PARAM_STR);    
+			$query->bindParam(':id', $id, PDO::PARAM_STR);
             $query->execute();
 
-            $_SESSION ['message'] = "Contact saved!";
+            $_SESSION ['message'] = "Contact Updated!";
             echo "Updated Data!"; //terminal message
 		}
 		catch(PDOException $e) {
@@ -126,9 +126,7 @@ if(isset($_POST['save'])) {
 if(isset($_GET['delete'])) {
 
     $conn = new Phone('phonebook','yuniseaen','password');
-
     $id = $_GET['delete'];
-
 
     $conn->deleteContact($id);
      header("location:data.php");
@@ -142,7 +140,8 @@ if(isset($_POST['update'])) {
     $lname = $_POST['lastname'];
     $cnumber = $_POST['contactnumber']; 
 
-    $conn->updateContact($fname,$lname,$cnumber);
+  	$conn->updateContact($id,$fname,$lname,$cnumber);
+
      header("location:data.php");
 }
 
