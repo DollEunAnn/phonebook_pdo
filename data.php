@@ -1,6 +1,8 @@
 <?php 
 	include 'functions.php';
 
+	$id ="";
+
 	if (!isset($_GET['edit'])) {
 		$contact['first_name'] = null;
 		$contact['last_name'] = null;

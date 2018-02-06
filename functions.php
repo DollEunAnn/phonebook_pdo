@@ -59,10 +59,7 @@ class Phone
 		try {
 
 			$query = $this->conn->prepare("DELETE FROM contacts WHERE id = :id");
-			$query->bindParam(':id',$id,PDO::PARAM_STR);
-			// $query->bindParam(':fname', $fname, PDO::PARAM_STR);       
-  			//$query->bindParam(':lname', $lname, PDO::PARAM_STR); 
-   			//$query->bindParam(':cnumber', $cnumber, PDO::PARAM_STR); 
+			$query->bindParam(':id',$id,PDO::PARAM_STR); 
 			$query->execute();
 
 			$_SESSION['message'] = "Contact Deleted";
@@ -90,7 +87,24 @@ class Phone
 
 			return $contact;
 		}
-			
+		catch(PDOException $e) {
+			echo "Error is: " .$e->getMessage();
+		}
+	}
+
+	public function updateContact($id){
+		try {
+
+			$query = $this->conn->prepare('UPDATE first_name = :fname,last_name = $lname,contact_number = $cnumber FROM contacts WHERE id = :id');
+			$query->bindParam(':id', $_POST['$id'], PDO::PARAM_STR);
+			$query->bindParam(':fname', $_POST['$fname'], PDO::PARAM_STR);       
+            $query->bindParam(':lname', $_POST['$lname'], PDO::PARAM_STR); 
+            $query->bindParam(':cnumber', $_POST['$cnumber'], PDO::PARAM_STR);    
+            $query->execute();
+
+            $_SESSION ['message'] = "Contact saved!";
+            echo "Updated Data!"; //terminal message
+		}
 		catch(PDOException $e) {
 			echo "Error is: " .$e->getMessage();
 		}
@@ -106,14 +120,14 @@ if(isset($_POST['save'])) {
     $cnumber = $_POST['contactnumber']; 
 
     $conn->addContact($fname,$lname,$cnumber);
-     header("location:index.php");
+     header("location:data.php");
 }
 
-if(isset($_POST['delete'])) {
+if(isset($_GET['delete'])) {
 
     $conn = new Phone('phonebook','yuniseaen','password');
 
-    $id = $_POST['id'];
+    $id = $_GET['delete'];
 
 
     $conn->deleteContact($id);
@@ -128,7 +142,7 @@ if(isset($_POST['update'])) {
     $lname = $_POST['lastname'];
     $cnumber = $_POST['contactnumber']; 
 
-    $conn->addContact($fname,$lname,$cnumber);
+    $conn->updateContact($fname,$lname,$cnumber);
      header("location:data.php");
 }
 
